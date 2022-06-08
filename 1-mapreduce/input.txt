@@ -1,0 +1,3 @@
+i love hadoop, i love spark
+i love storm.
+i lvoe python.
