@@ -1,0 +1,74 @@
+CREATE TABLE psn(
+id int,
+name string,
+likes array<string>,
+address map<string,string>
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+COLLECTION ITEMS TERMINATED BY '-'
+MAP KEYS TERMINATED BY ':'
+LINES TERMINATED BY '\n';
+
+
+
+LOAD DATA LOCAL INPATH '/home/guigu/data' INTO TABLE psn;
+
+外部表
+CREATE EXTERNAL TABLE psn1(
+id int,
+name string,
+likes array<string>,
+address map<string,string>
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+COLLECTION ITEMS TERMINATED BY '-'
+MAP KEYS TERMINATED BY ':'
+LINES TERMINATED BY '\n'
+location '/psn1/';
+
+
+LOAD DATA LOCAL INPATH '/home/guigu/data' INTO TABLE psn1;
+内部表和外部表的区别：
+1.创建外部表事需要制定目录
+2.删除是内部表会将表结构和元数据全部删除，外部表只删除表结构，不删除元数据
+
+
+分区
+分区字段不能在表的列中
+CREATE TABLE psn2(
+id int,
+name string,
+likes array<string>,
+address map<string,string>
+)
+partitioned by (age int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+COLLECTION ITEMS TERMINATED BY '-'
+MAP KEYS TERMINATED BY ':'
+LINES TERMINATED BY '\n';
+
+LOAD DATA LOCAL INPATH '/home/guigu/data' INTO TABLE psn2 partition (age=10);
+
+添加分区
+ALTER TABLE psn2 ADD PARTITION (age=10,sex='boy');
+
+
+从表向另一个表插数据
+CREATE TABLE psn3(
+id int,
+name string,
+likes array<string>
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+COLLECTION ITEMS TERMINATED BY '-'
+LINES TERMINATED BY '\n';
+
+FROM psn2
+INSERT OVERWRITE TABLE psn3
+SELECT id,name,likes;
+
+作用：1.复制表 2.可以作为中间表存在 3.一次插入多张表

@@ -5,6 +5,9 @@
 # PyCharm env
 venv/
 
+#python
+python/
+
 # User-specific stuff
 .idea/
 .idea/**/workspace.xml
