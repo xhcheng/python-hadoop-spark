@@ -72,3 +72,13 @@ INSERT OVERWRITE TABLE psn3
 SELECT id,name,likes;
 
 作用：1.复制表 2.可以作为中间表存在 3.一次插入多张表
+
+
+结构体
+create table student(
+id int,
+info struct<name:string,age:int>
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+COLLECTION ITEMS TERMINATED BY ':';
